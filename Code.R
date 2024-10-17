@@ -51,7 +51,12 @@ circos.par(gap.degree = 3, start.degree = 90)  # Gap between sectors and start a
 
 track_height <- 0.1  
 label_facing <- "inside"  # Direction of labels; can change to "reverse.clockwise" or "inside"
+label_font_size <- 1  # Font size for labels (adjustable)
+label_adjustment <- c(0, -2.5)  # Adjust label alignment (horizontal and vertical)
 
+# Step 6a: Remove periods from trait names before plotting
+cor_melt$Trait1 <- gsub("\\.", " ", cor_melt$Trait1)  # Replace periods with spaces
+cor_melt$Trait2 <- gsub("\\.", " ", cor_melt$Trait2)
 
 chordDiagram(
   x = cor_melt[, c("Trait1", "Trait2")],
@@ -71,7 +76,8 @@ circos.trackPlotRegion(
       CELL_META$sector.index,
       facing = label_facing,
       niceFacing = TRUE,
-      adj = c(0, 0.5)
+      adj = label_adjustment,
+      cex = label_font_size  # Adjust font size
     )
   },
   bg.border = NA, track.height = track_height  # Adjust track height for sector thickness
@@ -88,9 +94,6 @@ lgd <- Legend(
 )
 
 draw(lgd, x = unit(0.8, "npc"), y = unit(0.2, "npc"), just = c("right", "bottom"))
-
-
-
 
 # Step 8: Export the plot as a high-resolution image
 png("circos_plot_with_legend_high_res.png", width = 3000, height = 3000, res = 300)  # Increased resolution
@@ -117,7 +120,8 @@ circos.trackPlotRegion(
       CELL_META$sector.index,
       facing = label_facing,
       niceFacing = TRUE,
-      adj = c(0, 0.5)
+      adj = label_adjustment,
+      cex = label_font_size  # Adjust font size inside the export block
     )
   },
   bg.border = NA, track.height = track_height  # Adjust track height for sector thickness
@@ -128,5 +132,3 @@ draw(lgd, x = unit(1, "npc") - unit(10, "mm"), y = unit(1, "npc") - unit(10, "mm
 
 # Finish exporting the image
 dev.off()
-
-
